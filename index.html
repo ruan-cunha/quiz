@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARISA Aptitude Test: What's Your Mark?</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Exo+2:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <div id="start-screen" class="screen active">
+            <div class="header-logo">
+                <img src="https://i.imgur.com/vLylVf3.png" alt="ARISA Logo" class="arisa-logo"/>
+                <h1>ARISA APTITUDE TEST</h1>
+            </div>
+            <p class="subtitle">A PUBLIC ENGAGEMENT INITIATIVE</p>
+            <h2>What's Your Mark?</h2>
+            <p class="description">
+                In a world of powers, every hero has a calling. Every Awakened has a Mark. This psychological and aptitude screening is a public outreach tool designed by ARISA to help you understand your place. It's a fun way to see how your instincts align with some of the world's most notable heroes.
+                <br><br>
+                This is not a formal evaluation. It's a glimpse into your potential.
+                <br>
+            </p>
+            <button id="start-btn" class="btn">Begin Assessment</button>
+        </div>
+
+        <div id="quiz-screen" class="screen">
+            <div id="question-container">
+                <p id="question-counter" class="question-counter-text"></p>
+                <h2 id="question-text"></h2>
+                <div id="answer-buttons" class="btn-grid">
+                    </div>
+            </div>
+            <div id="minigame-container">
+                 </div>
+        </div>
+
+        <div id="result-screen" class="screen">
+            <div class="header-logo">
+                 <img src="https://i.imgur.com/vLylVf3.png" alt="ARISA Logo" class="arisa-logo"/>
+                <h2>Assessment Complete</h2>
+            </div>
+            <h3>Your Awakened Profile:</h3>
+            <h1 id="hero-match-name"></h1>
+            <p id="hero-match-description"></p>
+            <div id="trait-breakdown">
+                <h4>Dominant Traits:</h4>
+                <p id="user-traits"></p>
+            </div>
+            <p class="share-text">Share your Mark with the world! #WhatsYourMark</p>
+            <button id="restart-btn" class="btn">Take the Test Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

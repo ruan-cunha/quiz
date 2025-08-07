@@ -80,6 +80,31 @@ document.addEventListener('DOMContentLoaded', () => {
             question: 'ARISA Cognitive Exercise: A sharp mind is a hero\'s greatest asset. Match the hero team symbols under pressure.'
         },
         {
+            type: 'dilemma',
+            question: "You witness a member of the public being harassed for having a 'Saturn's Scar'. How do you intervene?",
+            answers: [
+                { text: 'Publicly and forcefully shame the aggressor to make an example of them.', traits: { direct: 2, impulsive: 1 } },
+                { text: 'Discreetly create a distraction, then offer the victim a safe way out.', traits: { indirect: 2, strategic: 1 } },
+                { text: 'Physically place yourself between them, de-escalating with a calm voice.', traits: { protective: 2, empathetic: 1 } },
+                { text: 'Record the incident as evidence and report it to ARISA, trusting official channels.', traits: { disciplined: 1, analytical: 1 } }
+            ]
+        },
+        {
+            type: 'personality',
+            question: 'When you\'re not on a mission, how do you spend your time?',
+            answers: [
+                { text: 'Training. Honing my skills and body is a round-the-clock commitment.', traits: { disciplined: 2, direct: 1 } },
+                { text: 'Building and tinkering with my gear. There\'s always a new upgrade to create.', traits: { tech_savvy: 2, unconventional: 1 } },
+                { text: 'Connecting with the community. It\'s important they see heroes as people.', traits: { charismatic: 1, empathetic: 1 } },
+                { text: 'Studying past incidents and potential future threats. Preparation is everything.', traits: { analytical: 1, strategic: 1 } }
+            ]
+        },
+        {
+            type: 'minigame',
+            game: 'incident_report',
+            question: 'ARISA Intel Drop: A preliminary report on the "Inferno" incident just came in. Quickly identify the key facts.'
+        },
+        {
             type: 'personality',
             question: 'You are offered a new piece of experimental tech for your suit. You...',
             answers: [
@@ -110,6 +135,16 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
         {
+            type: 'dilemma',
+            question: "A powerful, newly Awakened is causing massive property damage, not out of malice, but out of fear. What's your approach?",
+            answers: [
+                { text: 'Engage them in conversation, trying to understand their fear and talk them down.', traits: { empathetic: 2, charismatic: 1, leader: 1 } },
+                { text: 'Use the environment against them, creating barriers and traps to limit their movement.', traits: { strategic: 2, unconventional: 1 } },
+                { text: 'Deploy a non-lethal, high-impact takedown. The fastest end to the chaos is the safest.', traits: { direct: 1, disciplined: 1 } },
+                { text: 'Analyze their power from a distance to calculate the most efficient way to neutralize their ability.', traits: { analytical: 2, tech_savvy: 1, indirect: 1 } }
+            ]
+        },
+        {
             type: 'personality',
             question: 'Which environment are you most comfortable operating in?',
             answers: [
@@ -117,6 +152,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 { text: 'In a support role, providing tactical aid and protection.', traits: { protective: 1, strategic: 1 } },
                 { text: 'From a distance, analyzing the field and directing teammates.', traits: { analytical: 1, indirect: 1, leader: 1 } },
                 { text: 'Working on my own, using my unique skills to flank the enemy.', traits: { independent: 1, unconventional: 1 } }
+            ]
+        },
+        {
+            type: 'dilemma',
+            question: "You have the opportunity to join a highly structured, government-endorsed team like The Paramount. What's your reaction?",
+            answers: [
+                { text: 'Accept immediately. The structure and resources are the best way to make a difference.', traits: { disciplined: 1, leader: 1 } },
+                { text: 'Decline. True heroism operates outside of bureaucracy and public relations.', traits: { independent: 2, unconventional: 1 } },
+                { text: 'Negotiate the terms. I\'ll work with them, but on my own terms.', traits: { strategic: 1, charismatic: 1 } },
+                { text: 'Consider it, but primarily as a way to understand the system from the inside.', traits: { analytical: 1, indirect: 1 } }
             ]
         },
         {
@@ -174,7 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (question.type === 'minigame') {
             questionContainer.style.display = 'none';
             minigameContainer.style.display = 'block';
-            startMemoryGame();
+            if (question.game === 'memory') {
+                startMemoryGame();
+            } else if (question.game === 'incident_report') {
+                startIncidentReportGame();
+            }
         } else {
             questionContainer.style.display = 'block';
             minigameContainer.style.display = 'none';
@@ -219,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     score += userScores[trait] * hero.traits[trait];
                 }
             }
+            score += Math.random() * 0.1;
 
             if (score > highestScore) {
                 highestScore = score;
@@ -292,6 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 card1.classList.add('matched');
                 card2.classList.add('matched');
                 matchedPairs++;
+                flippedCards = [];
                 if (matchedPairs === symbols.length / 2) {
                     endMemoryGame(true);
                 }
@@ -299,15 +350,117 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     card1.classList.remove('flipped');
                     card2.classList.remove('flipped');
+                    flippedCards = [];
                 }, 700);
             }
-            flippedCards = [];
         }
 
         function endMemoryGame(success) {
             clearInterval(timer);           
-            const traits = success ? { analytical: 1, strategic: 1 } : { impulsive: 1 };
+            const traits = success ? { analytical: 1, strategic: 1, disciplined: 1 } : { impulsive: 1 };
             selectAnswer(traits);
         }
     }
+
+    function startIncidentReportGame() {
+        const reportText = "Inferno was one of Brazil's most enigmatic villains. Its behavior was erratic; sometimes it would just appear and observe, then attack with violence, only to retreat as if it lost interest. Its actions had no clear objective. Its body of dark, menacing metal was incredibly resistant, withstanding blows from Titã and Madame Ímpeto. It was ultimately defeated by the Defenders of Saturn.";
+        
+        const reportQuestions = [
+            {
+                question: "What was Inferno's most notable characteristic?",
+                answers: ["Unpredictable behavior", "Extreme speed", "Telepathic abilities", "Invulnerability to heat"],
+                correct: "Unpredictable behavior"
+            },
+            {
+                question: "According to the report, what was Inferno's final status?",
+                answers: ["Escaped", "Destroyed", "Defeated", "Joined a new group"],
+                correct: "Defeated"
+            },
+            {
+                question: "Which group was primarily responsible for stopping Inferno?",
+                answers: ["The Paramount", "The Vanguards", "ARISA", "Defenders of Saturn"],
+                correct: "Defenders of Saturn"
+            }
+        ];
+
+        let currentReportQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        function showReportQuestion() {
+            const q = reportQuestions[currentReportQuestionIndex];
+            minigameContainer.innerHTML = `
+                <div class="report-text" style="text-align: left; margin-bottom: 20px; font-size: 0.9rem; max-height: 150px; overflow-y: auto; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px;">${reportText}</div>
+                <h3 style="margin-bottom: 20px;">${q.question}</h3>
+                <div id="report-answers" class="btn-grid"></div>
+            `;
+
+            const answerGrid = document.getElementById('report-answers');
+            q.answers.forEach(text => {
+                const button = document.createElement('button');
+                button.innerText = text;
+                button.classList.add('btn');
+                button.addEventListener('click', () => {
+                    if (text === q.correct) {
+                        correctAnswers++;
+                    }
+                    currentReportQuestionIndex++;
+                    if (currentReportQuestionIndex < reportQuestions.length) {
+                        showReportQuestion();
+                    } else {
+                        endIncidentReportGame();
+                    }
+                });
+                answerGrid.appendChild(button);
+            });
+        }
+        
+        function endIncidentReportGame() {
+            const success = correctAnswers >= 2;
+            const traits = success ? { analytical: 2, strategic: 1 } : { impulsive: 1 };
+            selectAnswer(traits);
+        }
+
+        showReportQuestion();
+    }
+
+    function showResult() {
+    quizScreen.classList.remove('active');
+    resultScreen.classList.add('active');
+
+    let bestMatch = null;
+    let highestScore = -Infinity;
+
+    heroProfiles.forEach(hero => {
+        let score = 0;
+        for (const trait in hero.traits) {
+            if (userScores.hasOwnProperty(trait)) {
+                score += userScores[trait] * hero.traits[trait];
+            }
+        }
+        score += Math.random() * 0.1;
+
+        if (score > highestScore) {
+            highestScore = score;
+            bestMatch = hero;
+        }
+    });
+    
+    const sortedUserTraits = Object.entries(userScores)
+        .sort(([, a], [, b]) => b - a)
+        .filter(([, score]) => score > 0)
+        .slice(0, 3)
+        .map(([trait]) => trait.charAt(0).toUpperCase() + trait.slice(1).replace('_', ' '));
+
+    heroMatchName.innerText = bestMatch.name;
+    heroMatchDescription.innerText = bestMatch.description;
+    userTraitsText.innerText = sortedUserTraits.length > 0 ? sortedUserTraits.join(', ') : 'Balanced Profile';
+
+    const twitterBtn = document.getElementById('twitter-share-btn');
+    const heroName = bestMatch.name;
+    const shareText = `My ARISA Aptitude Test profile is ${heroName}! Find out what's your Mark. #WhatsYourMark`;
+
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+    
+    twitterBtn.href = twitterUrl;
+}
 });
